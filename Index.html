@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BatikiN - Platform Batik Nusantara</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'batik-brown': '#5C2E16',
+                        'batik-orange': '#A64B2A',
+                        'batik-cream': '#FDF9F1',
+                        'batik-beige': '#F4EAE0',
+                        'batik-dark': '#2D1B11'
+                    },
+                    fontFamily: {
+                        'serif': ['Lora', 'serif'],
+                        'sans': ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FDF9F1; }
+        .nav-link.active {
+            color: #A64B2A;
+            border-bottom: 2px solid #A64B2A;
+            font-weight: 600;
+        }
+        .page-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .page-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+  @keyframes sweepLight {
+        0% { left: -100%; }
+        50%, 100% { left: 200%; }
+    }
+    .animate-sweep {
+        position: relative;
+        overflow: hidden;
+    }
+    .animate-sweep::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -100%;
+        width: 50%; height: 200%;
+        /* Menggunakan gradasi cahaya cokelat transparan */
+        background: linear-gradient(to right, rgba(92, 46, 22, 0), rgba(92, 46, 22, 0.15), rgba(92, 46, 22, 0));
+        transform: skewX(-20deg);
+        animation: sweepLight 5s ease-in-out infinite;
+        z-index: 0;
+        pointer-events: none;
+    }
+    @keyframes pulseGlow {
+        /* Glow berdenyut menggunakan warna batik-brown */
+        0%, 100% { box-shadow: 0 0 15px rgba(92, 46, 22, 0.2); }
+        50% { box-shadow: 0 0 40px rgba(92, 46, 22, 0.5); }
+    }
+    .animate-pulse-glow {
+        animation: pulseGlow 3s ease-in-out infinite;
+    }  
+/* --- TAMBAHKAN KODE INI UNTUK ANIMASI TEKS --- */
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .animate-gradient-text {
+        background-size: 200% auto;
+        animation: gradientMove 3s linear infinite;
+        /* Tambahkan efek bercahaya (glow) halus */
+        text-shadow: 0 0 20px rgba(229, 193, 152, 0.4); 
+    }
+    /* --------------------------------------------- */
+        
+        /* Custom Scrollbar for sidebars */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D0C3B5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A64B2A; }
+
+        .batik-pattern-bg {
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23a64b2a" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+        }
+    </style>
+</head>
+<body class="font-sans text-batik-dark antialiased">
+
+    <!-- Header / Navigation -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-batik-beige shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigate('beranda')">
+                    <i class="fa-solid fa-fan text-batik-orange text-2xl mr-2"></i>
+                    <span class="font-serif font-bold text-2xl text-batik-brown tracking-tight">BatikiN</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8">
+                    <button onclick="navigate('beranda')" class="nav-link nav-btn active text-sm pb-1">Beranda</button>
+                    <button onclick="navigate('galeri')" class="nav-link nav-btn text-gray-600 hover:text-batik-orange transition text-sm pb-1">Galeri Motif</button>
+                    <button onclick="navigate('identifikasi')" class="nav-link nav-btn text-gray-600 hover:text-batik-orange transition text-sm pb-1">Identifikasi</button>
+                    <button onclick="navigate('eksplorasi')" class="nav-link nav-btn text-gray-600 hover:text-batik-orange transition text-sm pb-1">Eksplorasi Desain</button>
+                    <button onclick="navigate('informasi')" class="nav-link nav-btn text-gray-600 hover:text-batik-orange transition text-sm pb-1">Informasi Budaya</button>
+                    <button onclick="navigate('pengrajin')" class="nav-link nav-btn text-gray-600 hover:text-batik-orange transition text-sm pb-1">Pengrajin</button>
+                    <button onclick="navigate('tentang')" class="nav-link nav-btn text-gray-600 hover:text-batik-orange transition text-sm pb-1">Tentang</button>
+                    </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-500 hover:text-batik-brown"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button class="bg-batik-brown hover:bg-batik-orange text-white px-6 py-2 rounded-full font-medium transition shadow-md text-sm">Masuk</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="min-h-screen">
+
+        <!-- ========================================== -->
+        <!-- 1. HALAMAN BERANDA -->
+        <!-- ========================================== -->
+        <section id="page-beranda" class="page-section active">
+ <!-- Hero Section -->
+            <div class="relative bg-batik-dark rounded-3xl mx-4 lg:mx-8 mt-6 overflow-hidden min-h-[500px] flex items-center shadow-xl">
+                <!-- Background Image dengan Gradient Overlay -->
+                <div class="absolute inset-0 z-0">
+                    <img src="Background.jpeg" alt="Kain Batik" class="w-full h-full object-cover object-right opacity-70 mix-blend-luminosity">
+                    <!-- Gradasi dari cokelat gelap pekat (kiri) ke transparan (kanan) -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-batik-dark via-batik-dark/90 to-transparent"></div>
+                </div>
+                
+                <!-- Content -->
+                <div class="relative z-10 p-10 lg:p-20 max-w-3xl">
+                    <h1 class="font-serif text-5xl lg:text-6xl font-bold leading-tight mb-6 text-white drop-shadow-md">
+                        Batik Nusantara,<br>
+                        <!-- Teks Berwarna, Bercahaya, dan Berjalan -->
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#E5C198] via-[#FF8C00] to-[#E5C198] animate-gradient-text">Tanpa Batas Inspirasi</span>
+                    </h1>
+                    <p class="text-lg text-gray-300 mb-10 leading-relaxed max-w-xl">BatikiN adalah platform berbasis kecerdasan buatan yang menghubungkan warisan budaya batik dengan inovasi desain digital untuk mendukung pengrajin dan industri kreatif Nusantara.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="navigate('eksplorasi')" class="bg-batik-orange hover:bg-[#8e3f22] text-white px-8 py-3 rounded-full font-semibold transition shadow-lg">Mulai Eksplorasi Desain</button>
+                        <button onclick="navigate('galeri')" class="bg-transparent border border-gray-300 hover:border-white hover:bg-white hover:text-batik-dark text-white px-8 py-3 rounded-full font-semibold transition">Lihat Galeri Motif</button>
+                    </div>
+                </div>
+            </div>
+
+ <!-- Fitur Section (Sederhana & Bersih) -->
+            <div class="max-w-5xl mx-auto px-4 py-12 relative z-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    
+                    <div class="px-2">
+                        <div class="bg-[#FCEADE] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-[#994625] text-2xl transition hover:scale-110 duration-300">
+                            <i class="fa-solid fa-expand"></i>
+                        </div>
+                        <h3 class="font-bold text-[#2D1B11] text-sm leading-relaxed">Identifikasi Motif<br><span class="font-normal text-gray-600 text-xs">berbasis CNN</span></h3>
+                    </div>
+
+                    <div class="px-2">
+                        <div class="bg-[#FCEADE] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-[#994625] text-2xl transition hover:scale-110 duration-300">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="font-bold text-[#2D1B11] text-sm leading-relaxed">Perpaduan Motif<br><span class="font-normal text-gray-600 text-xs">untuk Desain Baru</span></h3>
+                    </div>
+
+                    <div class="px-2">
+                        <div class="bg-[#FCEADE] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-[#994625] text-2xl transition hover:scale-110 duration-300">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3 class="font-bold text-[#2D1B11] text-sm leading-relaxed">Informasi Budaya<br><span class="font-normal text-gray-600 text-xs">dan Makna Motif</span></h3>
+                    </div>
+
+                    <div class="px-2">
+                        <div class="bg-[#FCEADE] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-[#994625] text-2xl transition hover:scale-110 duration-300">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3 class="font-bold text-[#2D1B11] text-sm leading-relaxed">Dukungan untuk<br><span class="font-normal text-gray-600 text-xs">Pengrajin & UMKM</span></h3>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- 2. HALAMAN GALERI MOTIF -->
+        <!-- ========================================== -->
+        <section id="page-galeri" class="page-section">
+ <!-- Header Galeri -->
+            <div class="relative bg-gradient-to-r from-[#F4EAE0] to-[#FDF9F1] batik-pattern-bg py-8 px-8 mb-8 border-b border-[#E8DCCB] shadow-sm animate-sweep">
+                <!-- Elemen cahaya blur statis warna cokelat -->
+                <div class="absolute top-0 left-1/4 w-64 h-64 bg-batik-brown rounded-full mix-blend-overlay filter blur-3xl opacity-20"></div>
+                
+                <div class="relative max-w-7xl mx-auto flex items-center gap-6 z-10">
+                    <!-- Lingkaran Ikon yang sedikit diperkecil -->
+                    <div class="relative w-20 h-20 bg-white rounded-full flex items-center justify-center border border-white/80 shrink-0 animate-pulse-glow transition-transform duration-500 hover:scale-105 z-10">
+                        <i class="fa-solid fa-swatchbook text-3xl bg-clip-text text-transparent bg-gradient-to-br from-batik-orange to-batik-brown relative z-10"></i>
+                    </div>
+                    
+                    <!-- Teks -->
+                    <div class="relative z-10">
+                        <h1 class="font-serif text-3xl font-bold text-batik-brown mb-2 tracking-tight drop-shadow-sm">Galeri Motif Batik Nusantara</h1>
+                        <p class="text-gray-700 max-w-2xl text-base leading-relaxed font-light">Jelajahi berbagai motif batik lengkap dengan informasi budaya dan gunakan sebagai referensi untuk eksplorasi desain.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row gap-8 pb-20">
+                <!-- Sidebar Filter -->
+                <aside class="w-full md:w-64 flex-shrink-0 space-y-8">
+                    <div>
+                        <h3 class="font-bold text-sm mb-3">Cari Motif</h3>
+                        <div class="relative">
+                            <input type="text" placeholder="Cari nama motif, daerah..." class="w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-batik-orange">
+                            <button class="absolute right-2 top-2 text-gray-400 hover:text-batik-orange"><i class="fa-solid fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-sm mb-3">Kategori Motif</h3>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <label class="flex items-center gap-2"><input type="checkbox" checked class="accent-batik-orange"> Semua</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Flora</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Fauna</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Geometris</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Alam Semesta</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Kehidupan Manusia</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Lainnya</label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-bold text-sm mb-3">Daerah Asal</h3>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Jawa</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Sumatera</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Kalimantan</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Sulawesi</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Bali & Nusa Tenggara</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Maluku</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" class="accent-batik-orange"> Papua</label>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Grid Galeri -->
+                <div class="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group cursor-pointer" onclick="navigate('informasi')">
+                        <div class="h-40 bg-gray-200 overflow-hidden relative">
+                            <img src="Parang.png" alt="Parang" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Parang</h4>
+                                <p class="text-xs text-gray-500">Jawa Tengah</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="Kawung.png" alt="Kawung" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Kawung</h4>
+                                <p class="text-xs text-gray-500">Yogyakarta</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="Mega.png" alt="Mega Mendung" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Mega Mendung</h4>
+                                <p class="text-xs text-gray-500">Cirebon</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="ceplok.png" alt="Ceplok" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Ceplok</h4>
+                                <p class="text-xs text-gray-500">Jawa Tengah</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="Trumtum.png" alt="Truntum" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Truntum</h4>
+                                <p class="text-xs text-gray-500">Yogyakarta</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                     <!-- Card 6 -->
+                     <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="sido.png" alt="Sido Mukti" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Sido Mukti</h4>
+                                <p class="text-xs text-gray-500">Solo</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <!-- Card 7 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="Tujuh.png" alt="Tujuh Rupa" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Tujuh Rupa</h4>
+                                <p class="text-xs text-gray-500">Pekalongan</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <!-- Card 8 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                        <div class="h-40 bg-gray-200 overflow-hidden">
+                            <img src="Udan.png" alt="Udan Liris" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-batik-brown">Udan Liris</h4>
+                                <p class="text-xs text-gray-500">Jawa Tengah</p>
+                            </div>
+                            <button class="text-gray-300 hover:text-red-500"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+ <!-- HALAMAN IDENTIFIKASI -->
+    <section id="page-identifikasi" class="page-section hidden max-w-7xl mx-auto px-4 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="font-serif text-4xl font-bold text-batik-dark mb-3">Identifikasi Motif Batik dengan AI</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Unggah gambar batik untuk mengetahui motif yang paling sesuai dan dapatkan referensi motif terkait.</p>
+        </div>
+
+        <!-- Layout 3 Kolom -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- 1. Area Unggah -->
+            <div class="bg-white border-2 border-dashed border-gray-300 rounded-3xl p-8 flex flex-col items-center justify-center text-center min-h-[320px] shadow-sm relative transition hover:border-batik-orange">
+                <div class="w-16 h-16 bg-[#F4EAE0] text-batik-orange rounded-full flex items-center justify-center text-2xl mb-4">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                </div>
+                <p class="font-semibold text-batik-dark mb-1">Drag & drop gambar batik di sini<br>atau klik untuk memilih file</p>
+                <p class="text-sm text-gray-400 mb-6">Format: JPG, PNG (maks. 5 MB)</p>
+                <button class="bg-batik-brown hover:bg-[#4a2410] text-white w-full py-3 rounded-xl font-semibold transition">Identifikasi Motif</button>
+            </div>
+
+            <!-- 2. Pratinjau Gambar -->
+            <div class="bg-white rounded-3xl p-3 shadow-sm border border-gray-100 relative min-h-[320px] flex items-center justify-center overflow-hidden">
+                <!-- Tombol Hapus/Silang -->
+                <button class="absolute top-5 right-5 w-8 h-8 bg-[#8B2323] text-white rounded-full flex items-center justify-center hover:bg-red-800 z-10 shadow-md transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <!-- Pastikan Anda memiliki gambar parang.jpg -->
+                <img src="Identifikasi.png" alt="Preview Batik" class="w-full h-full object-cover rounded-2xl">
+            </div>
+
+            <!-- 3. Hasil Identifikasi -->
+            <div class="bg-[#FDF9F1] rounded-3xl p-8 shadow-sm border border-[#E8DCCB] flex flex-col justify-between min-h-[320px]">
+                <div>
+                    <div class="flex items-center gap-2 text-batik-dark font-bold text-sm mb-3">
+                        <i class="fa-solid fa-microchip text-batik-orange"></i>
+                        <span>Hasil Identifikasi</span>
+                    </div>
+                    <h2 class="font-serif text-4xl font-bold text-batik-dark mb-4">Parang</h2>
+                    
+                    <!-- Progress Bar Keyakinan -->
+                    <div class="flex items-center gap-1 text-sm font-semibold text-batik-dark mb-2">
+                        <i class="fa-solid fa-shield-halved text-batik-orange"></i> 
+                        <span>Tingkat Keyakinan: 92,4%</span>
+                    </div>
+                    <div class="w-full bg-gray-300 rounded-full h-2 mb-6">
+                        <div class="bg-batik-orange h-2 rounded-full" style="width: 92.4%"></div>
+                    </div>
+
+                    <!-- Informasi Tambahan -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-white p-3 rounded-xl border border-gray-200">
+                            <p class="text-xs text-gray-500 mb-1">Asal Daerah</p>
+                            <p class="font-semibold text-batik-dark text-sm">Jawa Tengah</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-gray-200">
+                            <p class="text-xs text-gray-500 mb-1">Kategori</p>
+                            <p class="font-semibold text-batik-dark text-sm">Geometris</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="bg-batik-brown hover:bg-batik-dark text-white w-full py-3 rounded-xl font-semibold transition flex justify-center items-center gap-2">
+                    Lihat Detail Motif <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Referensi Motif Terkait -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-6">
+            <div class="flex flex-col gap-1 min-w-[200px]">
+                <div class="flex items-center gap-2 font-bold text-batik-dark text-sm">
+                    <i class="fa-solid fa-swatchbook text-batik-orange"></i>
+                    <span>Referensi Motif Terkait</span>
+                </div>
+            </div>
+            
+            <div class="flex-1 flex items-center justify-between w-full">
+                <button class="w-8 h-8 rounded-full border border-batik-orange text-batik-orange flex items-center justify-center hover:bg-batik-orange hover:text-white transition"><i class="fa-solid fa-chevron-left"></i></button>
+                
+                <!-- Daftar Motif -->
+                <div class="flex gap-4 overflow-x-auto px-4 w-full justify-between">
+                    <div class="text-center w-28 cursor-pointer group">
+                        <img src="22.png" class="w-full h-16 object-cover rounded-lg mb-2 shadow-sm group-hover:opacity-80 transition" alt="Parang Barong">
+                        <p class="text-xs font-semibold text-batik-dark">Parang Barong</p>
+                    </div>
+                    <div class="text-center w-28 cursor-pointer group">
+                        <img src="klinik.png" class="w-full h-16 object-cover rounded-lg mb-2 shadow-sm group-hover:opacity-80 transition" alt="Parang Klitik">
+                        <p class="text-xs font-semibold text-batik-dark">Parang Klitik</p>
+                    </div>
+                    <div class="text-center w-28 cursor-pointer group">
+                        <img src="kusumo.png" class="w-full h-16 object-cover rounded-lg mb-2 shadow-sm group-hover:opacity-80 transition" alt="Parang Kusumo">
+                        <p class="text-xs font-semibold text-batik-dark">Parang Kusumo</p>
+                    </div>
+                    <div class="text-center w-28 cursor-pointer group">
+                        <img src="rusak.png" class="w-full h-16 object-cover rounded-lg mb-2 shadow-sm group-hover:opacity-80 transition" alt="Parang Rusak">
+                        <p class="text-xs font-semibold text-batik-dark">Parang Rusak</p>
+                    </div>
+                </div>
+
+                <button class="w-8 h-8 rounded-full border border-batik-orange text-batik-orange flex items-center justify-center hover:bg-batik-orange hover:text-white transition"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+
+ <!-- ========================================== -->
+        <!-- 4. HALAMAN EKSPLORASI / PERPADUAN MOTIF -->
+        <!-- ========================================== -->
+        <section id="page-eksplorasi" class="page-section max-w-7xl mx-auto px-4 lg:px-8 py-8">
+            <!-- Header Teks Ringkas -->
+            <div class="text-center mb-8">
+                <h1 class="font-serif text-3xl md:text-4xl font-bold text-batik-dark mb-2">Rancang Motif Baru dari Perpaduan Motif</h1>
+                <p class="text-gray-600 max-w-2xl mx-auto text-xs md:text-sm leading-relaxed">
+                    Pilih dua motif batik sebagai sumber inspirasi, atur gaya dan warna, lalu lihat hasil pratinjau motif baru secara instan.
+                </p>
+            </div>
+
+            <!-- Grid 3 Kolom Utama -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                
+                <!-- KOLOM 1: PILIH MOTIF SUMBER (Porsi 4/12) -->
+                <div class="lg:col-span-4 bg-[#FDF9F1]/90 backdrop-blur-sm rounded-3xl p-5 border border-[#E8DCCB] shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-base text-batik-dark mb-4">1. Pilih Motif Sumber</h3>
+                        
+                        <div class="flex items-center justify-between gap-2 relative">
+                            <!-- Card Motif 1 -->
+                            <div class="flex-1 bg-white rounded-2xl p-3 border border-gray-100 shadow-sm relative text-center">
+                                <button class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xs p-1 z-10 transition">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                
+                                <div class="w-full aspect-square rounded-xl overflow-hidden mb-2 bg-gray-100">
+                                    <img src="Kawung.png" alt="Kawung" class="w-full h-full object-cover">
+                                </div>
+                                
+                                <h4 class="font-bold text-batik-dark text-xs">Kawung</h4>
+                                <p class="text-[10px] text-gray-500 mb-3">Yogyakarta</p>
+                                
+                                <button class="w-full bg-[#F4EAE0] hover:bg-batik-orange hover:text-white text-batik-brown text-[11px] font-semibold py-1.5 rounded-lg transition border border-[#E8DCCB]">
+                                    Ganti
+                                </button>
+                            </div>
+
+                            <!-- Plus Icon -->
+                            <div class="w-7 h-7 rounded-full border border-batik-orange text-batik-orange bg-white flex items-center justify-center shrink-0 z-10 shadow-sm">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </div>
+
+                            <!-- Card Motif 2 -->
+                            <div class="flex-1 bg-white rounded-2xl p-3 border border-gray-100 shadow-sm relative text-center">
+                                <button class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xs p-1 z-10 transition">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                                
+                                <div class="w-full aspect-square rounded-xl overflow-hidden mb-2 bg-gray-100">
+                                    <img src="Parang.png" alt="Parang" class="w-full h-full object-cover">
+                                </div>
+                                
+                                <h4 class="font-bold text-batik-dark text-xs">Parang</h4>
+                                <p class="text-[10px] text-gray-500 mb-3">Jawa Tengah</p>
+                                
+                                <button class="w-full bg-[#F4EAE0] hover:bg-batik-orange hover:text-white text-batik-brown text-[11px] font-semibold py-1.5 rounded-lg transition border border-[#E8DCCB]">
+                                    Ganti
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KOLOM 2: ATUR GAYA PERPADUAN (Porsi 4/12) -->
+                <div class="lg:col-span-4 bg-[#FDF9F1]/90 backdrop-blur-sm rounded-3xl p-5 border border-[#E8DCCB] shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-base text-batik-dark mb-4">2. Atur Gaya Perpaduan</h3>
+                        
+                        <!-- Slider -->
+                        <div class="mb-4">
+                            <div class="flex justify-between text-xs font-medium text-batik-dark mb-1.5">
+                                <span>Tingkat Perpaduan</span>
+                                <span class="font-bold text-batik-orange">Seimbang</span>
+                            </div>
+                            <input type="range" min="0" max="100" value="50" class="w-full accent-batik-orange h-2 bg-[#E8DCCB] rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-gray-500 mt-1">
+                                <span>Dominan 1</span>
+                                <span>Dominan 2</span>
+                            </div>
+                        </div>
+
+                        <!-- Palet Warna -->
+                        <div class="mb-4">
+                            <p class="text-xs font-bold text-batik-dark mb-2">Palet Warna</p>
+                            <div class="flex gap-2">
+                                <button class="w-7 h-7 rounded-full bg-[#5C2E16] ring-2 ring-offset-2 ring-batik-orange transition hover:scale-105"></button>
+                                <button class="w-7 h-7 rounded-full bg-[#F4EAE0] border border-gray-300 transition hover:scale-105"></button>
+                                <button class="w-7 h-7 rounded-full bg-[#D99A6C] transition hover:scale-105"></button>
+                                <button class="w-7 h-7 rounded-full bg-[#1C120C] transition hover:scale-105"></button>
+                                <button class="w-7 h-7 rounded-full bg-[#1F3A60] transition hover:scale-105"></button>
+                            </div>
+                        </div>
+
+                        <!-- Jenis Pola -->
+                        <div class="mb-4">
+                            <p class="text-xs font-bold text-batik-dark mb-2">Jenis Pola</p>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button class="bg-white border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:border-batik-orange transition">
+                                    <i class="fa-solid fa-grip text-sm text-gray-400"></i>
+                                    <span class="text-[10px] font-medium text-gray-600">Reguler</span>
+                                </button>
+                                <button class="bg-[#FDF9F1] border-2 border-batik-orange rounded-xl py-2 flex flex-col items-center justify-center gap-1 shadow-sm">
+                                    <i class="fa-solid fa-shapes text-sm text-batik-orange"></i>
+                                    <span class="text-[10px] font-bold text-batik-orange">Diagonal</span>
+                                </button>
+                                <button class="bg-white border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:border-batik-orange transition">
+                                    <i class="fa-solid fa-spa text-sm text-gray-400"></i>
+                                    <span class="text-[10px] font-medium text-gray-600">Bebas</span>
+                                </button>
+                                <button class="bg-white border border-gray-200 rounded-xl py-2 flex flex-col items-center justify-center gap-1 hover:border-batik-orange transition">
+                                    <i class="fa-solid fa-clover text-sm text-gray-400"></i>
+                                    <span class="text-[10px] font-medium text-gray-600">Simetris</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Regenerate -->
+                    <button class="w-full bg-[#5C2E16] hover:bg-[#422110] text-white py-2.5 rounded-xl font-semibold transition text-xs flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Generasi Ulang</span>
+                    </button>
+                </div>
+
+                <!-- KOLOM 3: KOTAK HASIL MOTIF BARU (Porsi 4/12) -->
+                <div class="lg:col-span-4 bg-white rounded-3xl p-5 border border-[#E8DCCB] shadow-md flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-base text-batik-dark">3. Hasil Motif Baru</h3>
+                            <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                <i class="fa-solid fa-check"></i> Selesai
+                            </span>
+                        </div>
+
+                        <!-- Kotak Gambar Hasil Pratinjau Motif -->
+                        <div class="w-full aspect-square rounded-2xl overflow-hidden mb-3 border border-gray-200 relative group shadow-inner">
+                            <!-- Menggunakan Identifikasi.png atau file gambar sampel motif perpaduan -->
+                            <img src="HASIL.png" alt="Hasil Motif Baru" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                                <button class="w-8 h-8 rounded-full bg-white text-batik-dark flex items-center justify-center shadow-md hover:bg-batik-orange hover:text-white transition">
+                                    <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4 class="font-serif font-bold text-batik-brown text-sm">Kawung Parang Modern</h4>
+                            <p class="text-[11px] text-gray-500">Kombinasi Pola Diagonal & Warna Terracotta</p>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Hasil -->
+                    <div class="flex gap-2 pt-2 border-t border-gray-100">
+                        <button onclick="navigate('hasil')" class="flex-1 bg-batik-brown hover:bg-batik-dark text-white py-2.5 rounded-xl font-semibold transition text-xs text-center shadow-sm">
+                            Lihat Detail
+                        </button>
+                        <button class="bg-[#FDF9F1] border border-[#E8DCCB] hover:bg-batik-beige text-batik-brown px-3 py-2.5 rounded-xl transition text-xs font-semibold">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- 5. HALAMAN HASIL PERPADUAN MOTIF -->
+        <!-- ========================================== -->
+        <section id="page-hasil" class="page-section">
+            <div class="max-w-6xl mx-auto px-4 py-12">
+                <div class="mb-8 flex items-center justify-between">
+                    <div>
+                        <h1 class="font-serif text-3xl font-bold text-batik-brown mb-2">Hasil Rancangan Motif</h1>
+                        <p class="text-gray-600">Berikut adalah hasil perpaduan motif berdasarkan pilihan Anda.<br>Desain ini dapat dijadikan referensi untuk pengembangan lebih lanjut.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Main Result -->
+                    <div class="lg:w-7/12 flex flex-col">
+                        <div class="bg-white p-2 rounded-2xl shadow-sm border border-batik-beige mb-4 flex-1">
+                            <img src="https://placehold.co/800x600/7c2d12/FFF?text=Hasil+Perpaduan+Kawung+%2B+Parang" class="w-full h-full object-cover rounded-xl" style="min-height: 400px;">
+                        </div>
+                        <p class="text-sm font-semibold text-batik-brown">Motif Hasil Perpaduan</p>
+                    </div>
+
+                    <!-- Details & Variations -->
+                    <div class="lg:w-5/12 flex flex-col gap-6">
+                        <!-- Info Box -->
+                        <div class="bg-batik-cream p-6 rounded-2xl border border-batik-beige">
+                            <h3 class="font-bold text-batik-brown mb-4">Informasi Desain</h3>
+                            
+                            <div class="space-y-3 text-sm">
+                                <div class="flex"><span class="w-32 text-gray-500">Motif Sumber</span><span class="font-medium text-gray-800">: Kawung (Yogyakarta) + Parang (Jawa Tengah)</span></div>
+                                <div class="flex"><span class="w-32 text-gray-500">Gaya Perpaduan</span><span class="font-medium text-gray-800">: Seimbang</span></div>
+                                <div class="flex"><span class="w-32 text-gray-500">Jenis Pola</span><span class="font-medium text-gray-800">: Diagonal</span></div>
+                                <div class="flex items-center">
+                                    <span class="w-32 text-gray-500">Palet Warna</span>
+                                    <span class="flex gap-2">
+                                        : <span class="w-4 h-4 rounded-full bg-[#D99A6C]"></span>
+                                          <span class="w-4 h-4 rounded-full bg-[#F5E6D3]"></span>
+                                          <span class="w-4 h-4 rounded-full bg-[#8B5A2B]"></span>
+                                          <span class="w-4 h-4 rounded-full bg-[#000000]"></span>
+                                          <span class="w-4 h-4 rounded-full bg-[#1C3F60]"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-batik-beige/50">
+                                <h4 class="font-medium text-sm mb-1">Deskripsi</h4>
+                                <p class="text-xs text-gray-600 leading-relaxed">Perpaduan antara karakter geometris Kawung dengan pola diagonal Parang menghasilkan motif baru yang mempertahankan identitas tradisional namun memberikan kesan modern dan dinamis.</p>
+                            </div>
+
+                            <div class="flex gap-2 mt-6">
+                                <button class="flex-1 bg-white border border-batik-brown text-batik-brown hover:bg-batik-beige py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition"><i class="fa-regular fa-bookmark"></i> Simpan ke Koleksi</button>
+                                <button class="flex-1 bg-batik-brown text-white hover:bg-batik-dark py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition"><i class="fa-solid fa-download"></i> Unduh Gambar</button>
+                                <button class="bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-center transition"><i class="fa-solid fa-share-nodes"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Variations -->
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-batik-beige flex-1">
+                            <h3 class="font-bold text-batik-brown mb-4 text-sm flex justify-between items-center">Variasi Lain 
+                                <div class="flex gap-1">
+                                    <button class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-[10px] hover:bg-batik-beige"><i class="fa-solid fa-chevron-left"></i></button>
+                                    <button class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-[10px] hover:bg-batik-beige"><i class="fa-solid fa-chevron-right"></i></button>
+                                </div>
+                            </h3>
+                            <div class="flex flex-col gap-3 h-full justify-between pb-2">
+                                <img src="https://placehold.co/400x120/8b3c1a/FFF?text=Variasi+1" class="w-full h-16 object-cover rounded-lg border border-batik-orange cursor-pointer">
+                                <img src="https://placehold.co/400x120/6b2c1a/FFF?text=Variasi+2" class="w-full h-16 object-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100">
+                                <img src="https://placehold.co/400x120/4b1c0a/FFF?text=Variasi+3" class="w-full h-16 object-cover rounded-lg cursor-pointer opacity-70 hover:opacity-100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+ <!-- ========================================== -->
+        <!-- 6. HALAMAN INFORMASI BUDAYA MOTIF -->
+        <!-- ========================================== -->
+        <section id="page-informasi" class="page-section">
+            <!-- Hero Motif -->
+            <div class="relative h-64 md:h-80 w-full bg-batik-dark overflow-hidden">
+                
+                <!-- Gambar Latar Belakang -->
+                <img src="Background.jpeg" alt="Latar Belakang Kawung" class="w-full h-full object-cover opacity-60">
+                
+                <!-- Gradasi pelapis dibuat lebih halus (transparan di sisi kanan) -->
+                <div class="absolute inset-0 bg-gradient-to-r from-[#1C120C] via-[#1C120C]/70 to-transparent flex items-center">
+                    <div class="max-w-7xl mx-auto px-8 w-full">
+                        
+                        <!-- Teks 'Kawung' menggunakan efek gradasi berwarna dan berjalan -->
+                        <h1 class="font-serif text-5xl md:text-6xl font-bold mb-2 drop-shadow-md">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#E5C198] via-[#FF8C00] to-[#E5C198] animate-gradient-text">Kawung</span>
+                        </h1>
+                        
+                        <p class="text-batik-orange font-medium text-lg mb-6 flex items-center gap-2 drop-shadow-sm"><i class="fa-solid fa-location-dot"></i> Yogyakarta</p>
+                        <p class="text-gray-200 max-w-xl text-sm md:text-base leading-relaxed drop-shadow-md">Motif Kawung dikenal sebagai salah satu motif batik klasik yang memiliki makna mendalam tentang kesucian, keseimbangan, dan harapan akan kehidupan yang baik.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="bg-white border-b border-gray-200 sticky top-20 z-40 shadow-sm">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="flex overflow-x-auto hide-scrollbar">
+                        <button class="px-6 py-4 text-sm font-medium text-gray-500 hover:text-batik-orange whitespace-nowrap">Deskripsi</button>
+                        <button class="px-6 py-4 text-sm font-bold text-batik-orange border-b-2 border-batik-orange whitespace-nowrap">Filosofi</button>
+                        <button class="px-6 py-4 text-sm font-medium text-gray-500 hover:text-batik-orange whitespace-nowrap">Ciri Khas</button>
+                        <button class="px-6 py-4 text-sm font-medium text-gray-500 hover:text-batik-orange whitespace-nowrap">Sejarah</button>
+                        <button class="px-6 py-4 text-sm font-medium text-gray-500 hover:text-batik-orange whitespace-nowrap">Penggunaan</button>
+                        <button class="px-6 py-4 text-sm font-medium text-gray-500 hover:text-batik-orange whitespace-nowrap">Galeri</button>
+                        <button class="px-6 py-4 text-sm font-medium text-gray-500 hover:text-batik-orange whitespace-nowrap">Motif Terkait</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Premium: Filosofi & Makna Utama -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start my-12 max-w-7xl mx-auto px-4 lg:px-8">
+                <!-- Kolom Kiri: Teks Filosofi (Porsi 2/3) -->
+                <div class="md:col-span-2 space-y-6">
+                    <!-- Label Aksen -->
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-[2px] bg-[#D99A6C]"></div>
+                        <span class="text-[#D99A6C] font-bold text-sm uppercase tracking-wider">Makna Mendalam</span>
+                    </div>
+                    
+                    <h2 class="font-serif text-3xl md:text-4xl font-bold text-[#4a2410]">Filosofi Motif Kawung</h2>
+                    
+                    <div class="text-gray-700 leading-relaxed text-base md:text-lg space-y-5">
+                        <p>
+                            Motif Kawung berasal dari bentuk buah kawung (buah aren) yang memiliki bentuk bulat dan simetris. Secara filosofi, motif ini melambangkan kesucian, keseimbangan, dan pengendalian diri. Dalam budaya Jawa, Kawung juga dikaitkan dengan harapan untuk mencapai kehidupan yang harmonis serta ilmu pengetahuan yang bermanfaat bagi sesama.
+                        </p>
+                        <p>
+                            Empat bulatan lonjong yang mengelilingi titik pusat melambangkan empat arah mata angin yang bersumber pada satu titik kekuatan (pusat), yang bermakna bahwa manusia harus selalu ingat akan asal usulnya dan Sang Pencipta.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Card Makna Utama (Porsi 1/3) -->
+                <div class="md:col-span-1 bg-white rounded-3xl p-7 shadow-lg border border-gray-100 relative overflow-hidden transition-shadow duration-300 hover:shadow-xl">
+                    <!-- Dekorasi Blur Latar Belakang -->
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-[#F4EAE0] rounded-full blur-2xl z-0"></div>
+                    
+                    <!-- Header Card -->
+                    <div class="flex items-center gap-4 border-b border-gray-100 pb-5 mb-5 relative z-10">
+                        <div class="w-10 h-10 rounded-xl bg-[#FDF9F1] flex items-center justify-center text-[#D99A6C] shadow-sm border border-[#E8DCCB]">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h3 class="font-bold text-xl text-[#4a2410]">Makna Utama</h3>
+                    </div>
+                    
+                    <!-- Daftar List -->
+                    <ul class="space-y-5 relative z-10">
+                        <li class="flex items-start gap-4 group">
+                            <div class="w-9 h-9 rounded-full bg-[#FDF9F1] text-[#D99A6C] flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 border border-[#E8DCCB]">
+                                <i class="fa-solid fa-droplet text-sm"></i>
+                            </div>
+                            <span class="text-gray-700 text-sm font-medium leading-tight pt-2">Kesucian dan hati yang bersih</span>
+                        </li>
+                        <li class="flex items-start gap-4 group">
+                            <div class="w-9 h-9 rounded-full bg-[#FDF9F1] text-[#D99A6C] flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 border border-[#E8DCCB]">
+                                <i class="fa-solid fa-scale-balanced text-sm"></i>
+                            </div>
+                            <span class="text-gray-700 text-sm font-medium leading-tight pt-2">Keseimbangan hidup</span>
+                        </li>
+                        <li class="flex items-start gap-4 group">
+                            <div class="w-9 h-9 rounded-full bg-[#FDF9F1] text-[#D99A6C] flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 border border-[#E8DCCB]">
+                                <i class="fa-solid fa-hand-holding-heart text-sm"></i>
+                            </div>
+                            <span class="text-gray-700 text-sm font-medium leading-tight pt-2">Pengendalian diri</span>
+                        </li>
+                        <li class="flex items-start gap-4 group">
+                            <div class="w-9 h-9 rounded-full bg-[#FDF9F1] text-[#D99A6C] flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 border border-[#E8DCCB]">
+                                <i class="fa-solid fa-seedling text-sm"></i>
+                            </div>
+                            <span class="text-gray-700 text-sm font-medium leading-tight pt-2">Harapan masa depan yang baik</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+ 
+<!-- ========================================== -->
+        <!-- 7. HALAMAN PENGRAJIN -->
+        <!-- ========================================== -->
+        <section id="page-pengrajin" class="page-section">
+            
+ <!-- Hero Pengrajin -->
+<div class="bg-[url('bakround%202.png')] bg-cover bg-center relative py-6 border-b border-[#E8DCCB] text-center">
+    
+    <!-- Tambahkan lapisan warna transparan (overlay) agar teks tetap terbaca -->
+    <div class="absolute inset-0 bg-[#FDF9F1]/80"></div>  
+
+    <!-- Teks Anda harus dibungkus relative z-10 agar tidak tertutup overlay -->
+    <div class="relative z-10">
+        <p class="text-batik-orange text-sm font-bold tracking-widest uppercase mb-2">Pelestari Warisan</p>
+        <h1 class="font-serif text-4xl font-bold text-[#4a2410] mb-4">Sosok di Balik Mahakarya</h1>
+        <p class="text-gray-700 max-w-xl mx-auto">Kenali lebih dekat para seniman dan pengrajin lokal yang mendedikasikan hidupnya untuk menjaga keaslian, filosofi, dan keindahan seni Batik Nusantara.</p>
+    </div>
+    
+</div>
+
+            <!-- Grid Pengrajin -->
+            <div class="max-w-7xl mx-auto px-4 lg:px-8 py-16">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Kartu Pengrajin 1 -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
+                        <div class="h-60 overflow-hidden relative">
+                            <!-- Ganti src dengan foto pengrajin Anda -->
+                            <img src="12.png" alt="Pengrajin Batik" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-xs font-bold text-[#4a2410] shadow-sm">Batik Tulis Tangan</div>
+                        </div>
+                        <div class="p-7 flex-grow flex flex-col">
+                            <p class="text-[#D99A6C] text-sm font-semibold mb-2 flex items-center gap-2"><i class="fa-solid fa-location-dot"></i> Giriloyo, Yogyakarta</p>
+                            <h3 class="font-serif text-2xl font-bold text-gray-900 mb-3">Paguyuban Berkah Lestari</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">Komunitas pengrajin yang berfokus pada pelestarian motif klasik keraton. Mereka mempertahankan teknik pewarnaan alami menggunakan ekstrak kulit kayu mahoni dan daun nila.</p>
+                            <button class="w-full py-3 rounded-xl border-2 border-[#4a2410] text-[#4a2410] font-semibold hover:bg-[#4a2410] hover:text-white transition-colors duration-300">Lihat Profil Lengkap</button>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Pengrajin 2 -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
+                        <div class="h-60 overflow-hidden relative">
+                            <!-- Ganti src dengan foto pengrajin Anda -->
+                            <img src="13.png" alt="Pengrajin Batik" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-xs font-bold text-[#4a2410] shadow-sm">Batik Cap Klasik</div>
+                        </div>
+                        <div class="p-7 flex-grow flex flex-col">
+                            <p class="text-[#D99A6C] text-sm font-semibold mb-2 flex items-center gap-2"><i class="fa-solid fa-location-dot"></i> Laweyan, Surakarta</p>
+                            <h3 class="font-serif text-2xl font-bold text-gray-900 mb-3">Keluarga Bapak Sudirjo</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">Generasi ketiga dari keluarga pembatik Laweyan yang ahli memadukan cap tembaga berusia puluhan tahun dengan gaya kontemporer yang elegan.</p>
+                            <button class="w-full py-3 rounded-xl border-2 border-[#4a2410] text-[#4a2410] font-semibold hover:bg-[#4a2410] hover:text-white transition-colors duration-300">Lihat Profil Lengkap</button>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Pengrajin 3 -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
+                        <div class="h-60 overflow-hidden relative">
+                            <!-- Ganti src dengan foto pengrajin Anda -->
+                            <img src="15.png" alt="Pengrajin Batik" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full text-xs font-bold text-[#4a2410] shadow-sm">Batik Pesisiran</div>
+                        </div>
+                        <div class="p-7 flex-grow flex flex-col">
+                            <p class="text-[#D99A6C] text-sm font-semibold mb-2 flex items-center gap-2"><i class="fa-solid fa-location-dot"></i> Trusmi, Cirebon</p>
+                            <h3 class="font-serif text-2xl font-bold text-gray-900 mb-3">Sanggar Megamendung</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">Spesialis motif pesisiran yang cerah. Sanggar ini memberdayakan lebih dari 30 ibu rumah tangga di desa Trusmi untuk mandiri secara ekonomi melalui goresan canting.</p>
+                            <button class="w-full py-3 rounded-xl border-2 border-[#4a2410] text-[#4a2410] font-semibold hover:bg-[#4a2410] hover:text-white transition-colors duration-300">Lihat Profil Lengkap</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+ <!-- ========================================== -->
+        <!-- 8. HALAMAN TENTANG (FIT-TO-SCREEN) -->
+        <!-- ========================================== -->
+        <section id="page-tentang" class="page-section max-w-7xl mx-auto px-4 lg:px-8 py-4">
+            
+            <!-- Hero Ringkas -->
+            <div class="bg-gradient-to-r from-[#F4EAE0] to-[#FDF9F1] rounded-2xl p-5 border border-[#E8DCCB] mb-5 text-center relative overflow-hidden shadow-sm">
+                <span class="text-batik-orange font-bold text-xs uppercase tracking-wider mb-1 block">Mengenal BatikiN</span>
+                <h1 class="font-serif text-2xl md:text-3xl font-bold text-batik-brown mb-1.5">Menjembatani Warisan Budaya dan Inovasi Digital</h1>
+                <p class="text-gray-600 text-xs md:text-sm max-w-3xl mx-auto leading-relaxed">
+                    Kami hadir untuk memastikan bahwa keindahan dan nilai filosofis Batik Nusantara tidak hanya dilestarikan, tetapi juga terus berkembang seiring kemajuan teknologi.
+                </p>
+            </div>
+
+            <!-- Grid Utama: Visi-Misi & Nilai Inti Berdampingan -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                
+                <!-- Kolom Kiri: Visi & Misi + Ringkasan (Porsi 7/12) -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-6 h-[2px] bg-batik-orange"></div>
+                            <span class="text-batik-orange font-bold text-xs uppercase tracking-wider">Visi Kami</span>
+                        </div>
+                        <h2 class="font-serif text-xl font-bold text-batik-dark mb-2">Lebih dari Sekadar Galeri Digital</h2>
+                        <p class="text-gray-600 text-xs md:text-sm leading-relaxed mb-3">
+                            BatikiN menggabungkan <strong>Kecerdasan Buatan (AI)</strong> dengan basis data budaya untuk memudarkan sekat antara tradisi dan teknologi modern. Kami menghadirkan ruang interaktif dari identifikasi motif hingga eksplorasi desain baru.
+                        </p>
+                    </div>
+
+                    <!-- Mini Stats Compact -->
+                    <div class="grid grid-cols-2 gap-3 pt-3 border-t border-gray-100">
+                        <div class="bg-[#FDF9F1] p-2.5 rounded-xl border border-[#E8DCCB] text-center">
+                            <h4 class="font-bold text-batik-brown text-xl">500+</h4>
+                            <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Motif Terkatalog</p>
+                        </div>
+                        <div class="bg-[#FDF9F1] p-2.5 rounded-xl border border-[#E8DCCB] text-center">
+                            <h4 class="font-bold text-batik-brown text-xl">92%</h4>
+                            <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Akurasi AI</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: 3 Nilai Inti Compact (Porsi 5/12) -->
+                <div class="lg:col-span-5 flex flex-col justify-between gap-2.5">
+                    
+                    <!-- Core Value 1 -->
+                    <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-3.5 hover:border-batik-orange transition">
+                        <div class="w-9 h-9 bg-[#FDF9F1] rounded-xl flex items-center justify-center text-batik-orange text-sm shrink-0 border border-[#E8DCCB]">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm text-batik-brown">Inovasi Teknologi</h3>
+                            <p class="text-gray-500 text-xs leading-snug">Identifikasi CNN & pembuatan motif baru berbasis AI.</p>
+                        </div>
+                    </div>
+
+                    <!-- Core Value 2 -->
+                    <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-3.5 hover:border-batik-orange transition">
+                        <div class="w-9 h-9 bg-[#FDF9F1] rounded-xl flex items-center justify-center text-batik-orange text-sm shrink-0 border border-[#E8DCCB]">
+                            <i class="fa-solid fa-book-journal-whills"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm text-batik-brown">Pelestarian Budaya</h3>
+                            <p class="text-gray-500 text-xs leading-snug">Dokumentasi filosofi & sejarah motif agar tak lekang zaman.</p>
+                        </div>
+                    </div>
+
+                    <!-- Core Value 3 -->
+                    <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex items-start gap-3.5 hover:border-batik-orange transition">
+                        <div class="w-9 h-9 bg-[#FDF9F1] rounded-xl flex items-center justify-center text-batik-orange text-sm shrink-0 border border-[#E8DCCB]">
+                            <i class="fa-solid fa-handshake-angle"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm text-batik-brown">Pemberdayaan Pengrajin</h3>
+                            <p class="text-gray-500 text-xs leading-snug">Mendukung UMKM lokal terhubung ke pasar digital.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    <script>
+        // Simple Navigation Logic
+        function navigate(pageId) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            document.getElementById('page-' + pageId).classList.add('active');
+
+            // Update Nav Links (Desktop)
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active', 'text-batik-orange');
+                link.classList.add('text-gray-600');
+            });
+
+           // 4. Sorot tombol navbar yang diklik
+            const navButtons = document.querySelectorAll('.nav-link');
+            navButtons.forEach(btn => {
+                const text = btn.innerText.toLowerCase();
+                if (
+                    (pageId === 'beranda' && text.includes('beranda')) ||
+                    (pageId === 'galeri' && text.includes('galeri')) ||
+                    (pageId === 'identifikasi' && text.includes('identifikasi')) ||
+                    (pageId === 'eksplorasi' && text.includes('eksplorasi')) ||
+                    (pageId === 'informasi' && text.includes('informasi')) ||
+                    (pageId === 'pengrajin' && text.includes('pengrajin')) ||
+                    (pageId === 'tentang' && text.includes('tentang')) // <-- TAMBAHKAN BARIS INI
+                ) {
+                    btn.classList.add('active', 'text-batik-orange');
+                    btn.classList.remove('text-gray-600');
+                }
+            });
+            // Scroll to top smooth
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mock function for Identification Page
+        function showMockResult() {
+            const resultDiv = document.getElementById('identifikasi-result');
+            
+            // Loading state
+            resultDiv.innerHTML = '<div class="text-center"><i class="fa-solid fa-circle-notch fa-spin text-batik-orange text-4xl mb-4 block"></i><p class="text-sm font-medium text-batik-brown mt-3">Sedang Menganalisis...</p></div>';
+            resultDiv.classList.remove('opacity-50', 'grayscale');
+
+            setTimeout(() => {
+                resultDiv.innerHTML = `
+                    <div class="w-full">
+                        <div class="flex items-start justify-between mb-4 border-b border-gray-200 pb-4">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-check-circle text-green-500 text-xl"></i>
+                                <span class="font-bold text-sm text-batik-dark">Hasil Identifikasi</span>
+                            </div>
+                            <button class="text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        
+                        <div class="flex gap-6 items-center">
+                            <!-- Menggunakan foto lokal untuk hasil identifikasi (pastikan file parang.jpg ada) -->
+                            <img src="parang.jpg" class="w-32 h-32 rounded-xl object-cover border border-gray-200 shadow-sm" alt="Parang">
+                            <div>
+                                <h2 class="font-serif text-3xl font-bold text-batik-brown mb-1">Parang</h2>
+                                <p class="text-sm font-medium text-batik-orange mb-4 flex items-center gap-1"><i class="fa-solid fa-bullseye"></i> Tingkat Keyakinan: 92.4%</p>
+                                
+                                <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                                    <div>
+                                        <p class="text-gray-500 text-xs">Asal Daerah</p>
+                                        <p class="font-semibold text-gray-800">Jawa Tengah</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500 text-xs">Kategori</p>
+                                        <p class="font-semibold text-gray-800">Geometris</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="navigate('informasi')" class="mt-6 w-full bg-batik-brown hover:bg-batik-dark text-white py-3 rounded-xl font-medium transition text-sm flex justify-center items-center gap-2">Lihat Detail Motif <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                `;
+            }, 1000); // 1 second mock loading
+        }
+    
+    </script>
+</body>
+</html>
